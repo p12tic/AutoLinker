@@ -29,15 +29,14 @@ $wgExtensionCredits['parserhook'][] = array(
     'version'        => '', // TODO
 );
 
+$AutoLinkerDefinitions = ['' => 'autolinker-definition'];
+
 $wgExtensionMessagesFiles['AutoLinkerMagic'] = dirname( __FILE__ ) . '/' . 'AutoLinker.i18n.magic.php';
 $wgExtensionMessagesFiles['AutoLinker'] = dirname( __FILE__ ) . '/' . 'AutoLinker.i18n.php';
 
 $wgHooks['ParserFirstCallInit'][] = 'AutoLinker::setup';
 
 class AutoLinker {
-
-    // Has Autolinker been initialised this session?
-    private static $initialised = false;
 
     // Cache link mapping for the currently processed page
     private static $cached_links = array();
@@ -49,33 +48,52 @@ class AutoLinker {
         return true;
     }
 
-    static function on_parse(&$parser, $param1 = '')
+    static function on_parse(&$parser, $param_list = '', $param_text = '')
     {
-        self::initialize();
+        global $AutoLinkerDefinitions;
+        if (!array_key_exists($param_list, $AutoLinkerDefinitions)) {
+            return $param_text;
+        }
+
+        if (!self::initialize($param_list)) {
+            return $param_text;
+        }
+
+        $p = $param_text;
 
         // remove surrounding whitespace and trailing () for functions
-        $p = preg_replace('/\(\)^/', '', trim($param1));
-        if (array_key_exists($p, self::$cached_links)) {
-            $output = '[[' . self::$cached_links[$p] . '|' . $param1 . ']]';
+        $p = preg_replace('/\(\)^/', '', trim($p));
+
+        if (array_key_exists($p, self::$cached_links[$param_list])) {
+            $output = '[[' . self::$cached_links[$param_list][$p] . '|' . $param_text . ']]';
         } else {
-            $output = $param1;
+            $output = $param_text;
         }
         return $output;
     }
 
-    private static function initialize()
+    private static function initialize($list_name)
     {
-        global $wgTitle;
+        global $wgTitle, $AutoLinkerDefinitions;
 
-        if (self::$initialised) {
-            return;
+        if (array_key_exists($list_name, self::$cached_links)) {
+            // already initialized
+            return true;
         }
 
-        self::$cached_links = [];
+        if (!array_key_exists($list_name, $AutoLinkerDefinitions)) {
+            // no such list
+            return false;
+        }
 
-        $json_string = wfMsgGetKey('autolinker-definition', true, false, false);
+
+        self::$cached_links[$list_name] = [];
+        $curr_list = &self::$cached_links[$list_name];
+
+        $json_string = wfMsgGetKey($AutoLinkerDefinitions[$list_name], true,
+                                   false, false);
+
         $data = json_decode($json_string, true);
-
 
         // while parsing the decoded definition, immediately check whether
         // a group includes currently processed page
@@ -139,10 +157,10 @@ class AutoLinker {
                     }
                 }
 
-                self::$cached_links[$linkdef['string']] = $linkdef['target'];
+                $curr_list[$linkdef['string']] = $linkdef['target'];
             }
         }
-        self::$initialised = true;
+        return true;
     }
 }
 

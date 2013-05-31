@@ -1,13 +1,39 @@
   Information
   ===========
 
-This is a MediaWiki extension that implements automatic creation of links for
-specific identifiers. The scope of the identifiers may be restricted to one page
-or a group of pages, that is, the identifier will be linkified only on the
-specified pages. The extension should be used as {{#autolink:identifier}}.
+This is a MediaWiki extension that implements automatic creation of links as a
+magic word. The information about which identifiers to link where should be
+provided in a special page in the MediaWiki namespace. It is possible to
+restrict linking of a identifier on one or a group of pages.
 
-The information about what identifiers to link where must be provided in a JSON
-format on the MediaWiki:autolinker-definition page. The format is as follows:
+  Usage
+  =====
+
+The extension should be used as {{#autolink:list_name|identifier}}. Here
+'identifier' is the identifier to be linkified and 'list_name' is the name of
+the definition list that the extension should use, as defined in
+$AutoLinkerDefinitions.
+
+  Configuration
+  =============
+
+The extension pulls the information about which identifiers to link where from
+definition lists.
+
+A definition list is a page in a MediaWiki namespace, format of which is
+described below. The first parameter passed to extension specifies which list
+to use. The allowed values and the actual locations of the lists are specified
+in an array in $AutoLinkerDefinitions. For example:
+
+$AutoLinkerDefinitions = [
+    'a' => 'autolinker-defs-a',
+    'b' => 'autolinker-defs-b'
+];
+
+If the above is included into the LocalSettings.php, then e.g.
+{{#autolink:a|???}} will pull the definitions from MediaWiki:autolinker-defs-a.
+
+A definition list is a file in the JSON format. The format is as follows:
 
     {
     "groups" : [
