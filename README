@@ -2,4 +2,40 @@
   ===========
 
 This is a MediaWiki extension that implements automatic creation of links for
-specific identifiers. 
+specific identifiers. The scope of the identifiers may be restricted to one page
+or a group of pages, that is, the identifier will be linkified only on the
+specified pages.
+
+The information about what identifiers to link where must be provided in a JSON
+format on the MediaWiki:autolinker-definition page. The format is as follows:
+
+    {
+    "groups" : [
+        {
+            "name" : "string",
+            OPTIONAL "base_url" : "string", END
+            "urls" : [ "url", "url", ... ],
+        },
+        ...
+    ],
+    "links" : [
+        {
+            "string" : "string",
+            OPTIONAL "on_group" : "name", OR "on_page" : "url", END
+            "target" : "url",
+        },
+        ...
+    ],
+
+The 'groups' array defines page groups that can later be used in
+'links[].on_group'. Each element in this array defines one page group. A page
+group is simply a named set of pages. This set is defined in the 'urls' array.
+If all pages in the group have a common title prefix, then it can be moved to
+'base_url' attribute. The 'name' attribute defines the name of a group. All
+groups should have unique names.
+
+The 'links' array defines identifier -> link target mapping. Each element in the
+array defines one mapping: 'string' is the identifier, 'target' is the target
+link. The set of pages that a mapping takes effect in can be restricted by
+'on_group' or 'on_page' attributes. 'on_group', if defined, must contain a name
+of a group that has been defined in the 'groups' array.
