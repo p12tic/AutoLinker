@@ -29,7 +29,9 @@ $wgExtensionCredits['parserhook'][] = array(
     'version'        => '', // TODO
 );
 
-$AutoLinkerDefinitions = ['' => 'autolinker-definition'];
+$AutoLinkerDefinitions = array(
+    '' => 'autolinker-definition'
+);
 
 $wgExtensionMessagesFiles['AutoLinkerMagic'] = dirname( __FILE__ ) . '/' . 'AutoLinker.i18n.magic.php';
 $wgExtensionMessagesFiles['AutoLinker'] = dirname( __FILE__ ) . '/' . 'AutoLinker.i18n.php';
@@ -87,7 +89,7 @@ class AutoLinker {
         }
 
 
-        self::$cached_links[$list_name] = [];
+        self::$cached_links[$list_name] = array();
         $curr_list = &self::$cached_links[$list_name];
 
         $json_string = wfMsgGetKey($AutoLinkerDefinitions[$list_name], true,
@@ -97,7 +99,7 @@ class AutoLinker {
 
         // while parsing the decoded definition, immediately check whether
         // a group includes currently processed page
-        $current_page_groups = [];
+        $current_page_groups = array();
 
         if (isset($data['groups'])) {
             foreach ($data['groups'] as $group) {
