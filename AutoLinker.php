@@ -63,6 +63,9 @@ class AutoLinker {
 
         $p = $param_text;
 
+        // remove surrounding whitespace and trailing () for functions
+        $p = preg_replace('/\(\)$/', '', trim($p));
+
         if (array_key_exists($p, self::$cached_links[$param_list])) {
             $output = '[[' . self::$cached_links[$param_list][$p] . '|' . $param_text . ']]';
         } else {
