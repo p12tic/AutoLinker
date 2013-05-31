@@ -25,7 +25,7 @@ $wgExtensionCredits['parserhook'][] = array(
     'name'           => 'AutoLinker',
     'author'         => 'p12',
     'descriptionmsg' => 'autolinker_desc',
-    'url'            => '', // TODO
+    'url'            => 'https://github.com/p12tic/AutoLinker',
     'version'        => '', // TODO
 );
 
