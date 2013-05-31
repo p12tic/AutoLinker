@@ -145,7 +145,7 @@ class AutoLinker {
                 }
 
                 if (isset($linkdef['on_group'])) {
-                    if (!array_key_exists($linkdef['on_group'], $current_page_groups)) {
+                    if (!in_array($linkdef['on_group'], $current_page_groups)) {
                         continue;
                     }
                 }
