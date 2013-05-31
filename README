@@ -4,7 +4,7 @@
 This is a MediaWiki extension that implements automatic creation of links for
 specific identifiers. The scope of the identifiers may be restricted to one page
 or a group of pages, that is, the identifier will be linkified only on the
-specified pages.
+specified pages. The extension should be used as {{#autolink:identifier}}.
 
 The information about what identifiers to link where must be provided in a JSON
 format on the MediaWiki:autolinker-definition page. The format is as follows:
