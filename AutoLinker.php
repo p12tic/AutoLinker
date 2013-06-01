@@ -104,11 +104,11 @@ class AutoLinker {
                     continue;
                 }
 
-                $url_to_check = $wgTitle;
+                $url_to_check = str_replace(' ', '_', $wgTitle);
 
                 // check base url (if provided)
                 if (isset($group['base_url'])) {
-                    $url = $group['base_url'];
+                    $url = str_replace(' ', '_', $group['base_url']);
                     $len = strlen($url);
                     if ($len > 0 && strncmp($url_to_check, $url, $len) != 0) {
                         // base url does not match
@@ -123,6 +123,7 @@ class AutoLinker {
                 }
                 $found = false;
                 foreach ($group['urls'] as $url) {
+                    $url = str_replace(' ', '_', $url);
                     if (strcmp($url_to_check, $url) == 0) {
                         $found = true;
                         break;
