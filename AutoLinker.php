@@ -1,6 +1,6 @@
 <?php
 /*
-    Copyright 2013 p12 <tir5c3@yahoo.co.uk>
+    Copyright 2013 Povilas Kanapickas <tir5c3@yahoo.co.uk>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ if (!defined('MEDIAWIKI')) {
 $wgExtensionCredits['parserhook'][] = array(
     'path'           => __FILE__,
     'name'           => 'AutoLinker',
-    'author'         => 'p12',
+    'author'         => 'Povilas Kanapickas',
     'descriptionmsg' => 'autolinker_desc',
     'url'            => 'https://github.com/p12tic/AutoLinker',
     'version'        => '', // TODO
