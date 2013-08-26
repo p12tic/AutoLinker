@@ -50,7 +50,8 @@ class AutoLinker {
         return true;
     }
 
-    static function on_parse(&$parser, $param_list = '', $param_text = '')
+    static function on_parse(&$parser, $param_list = '', $param_text = '',
+                             $title_override = '')
     {
         global $AutoLinkerDefinitions;
         if (!array_key_exists($param_list, $AutoLinkerDefinitions)) {
@@ -61,12 +62,17 @@ class AutoLinker {
             return $param_text;
         }
 
+        $title = $param_text;
+        if ($title_override != '') {
+            $title = $title_override;
+        }
+
         $p = $param_text;
 
         if (array_key_exists($p, self::$cached_links[$param_list])) {
-            $output = '[[' . self::$cached_links[$param_list][$p] . '|' . $param_text . ']]';
+            $output = '[[' . self::$cached_links[$param_list][$p] . '|' . $title . ']]';
         } else {
-            $output = $param_text;
+            $output = $title;
         }
         return $output;
     }
